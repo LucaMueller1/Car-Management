@@ -1,0 +1,56 @@
+package carmanagement.cockpit.dealer;
+
+import carmanagement.cockpit.car.Car;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "dealers")
+public class Dealer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    /*@OneToMany(mappedBy="dealer", cascade = CascadeType.ALL)
+    private Set<Car> cars = new HashSet<>();*/
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /*public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<Car> cars) {
+        this.cars = cars;
+    }*/
+
+    public Dealer() {
+    }
+
+    /*public Dealer(Long id, String name, Set<Car> cars) {
+        this.id = id;
+        this.name = name;
+        this.cars = cars;
+    }*/
+}
