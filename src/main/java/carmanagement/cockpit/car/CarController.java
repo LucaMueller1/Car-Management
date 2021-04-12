@@ -1,8 +1,12 @@
 package carmanagement.cockpit.car;
 
 
+import carmanagement.cockpit.car.dto.Position;
 import carmanagement.cockpit.dealer.DealerRepository;
+import org.hibernate.tool.schema.SchemaToolingLogging;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,5 +45,15 @@ public class CarController {
     public Long saveCar(@RequestBody Car car){
         car.setDealer(dealerRepository.findById(car.getDealer().getId()).get());
         return carService.saveCar(car).getId();
+    }
+
+    //updateCarPosition
+    @PostMapping("/update/position")
+    public ResponseEntity<?> updateCarPosition(@RequestBody Position position){
+        return new ResponseEntity<>(carService.updateCarPosition(position), HttpStatus.OK);
+    }
+    @PostMapping("/update/positionRelative")
+    public ResponseEntity<?> updateCarPositionRelative(@RequestBody Position position){
+        return new ResponseEntity<>(carService.updateRelativeCarPosition(position), HttpStatus.OK);
     }
 }

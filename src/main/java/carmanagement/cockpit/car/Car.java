@@ -1,6 +1,7 @@
 package carmanagement.cockpit.car;
 
 import carmanagement.cockpit.dealer.Dealer;
+import carmanagement.cockpit.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -18,22 +19,26 @@ public class Car {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "dealer_id", nullable = false)
-    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    //@JsonIgnore
+    @JsonIgnore
     private Dealer dealer;
 
-    @Column(name= "locationX")
-    private String locationX;
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(columnDefinition="integer", name = "user_id", nullable = true)
+    @JsonIgnore
+    private User user;
 
-    @Column(name= "locationy")
-    private String locationY;
+    @Column(name= "latitude")
+    private Double Latitude;
 
-    public Car(Long id, String brand, Dealer dealer, String locationX, String locationY) {
+    @Column(name= "longitude")
+    private Double Longitude;
+
+    public Car(Long id, String brand, Dealer dealer, Double latitude, Double longitude) {
         this.id = id;
         this.brand = brand;
         this.dealer = dealer;
-        this.locationX = locationX;
-        this.locationY = locationY;
+        this.Latitude = latitude;
+        this.Longitude = longitude;
     }
 
     public Car() {
@@ -64,19 +69,27 @@ public class Car {
         this.dealer = dealer;
     }
 
-    public String getLocationX() {
-        return locationX;
+    public Double getLongitude() {
+        return Longitude;
     }
 
-    public void setLocationX(String locationX) {
-        this.locationX = locationX;
+    public Double getLatitude() {
+        return Latitude;
     }
 
-    public String getLocationY() {
-        return locationY;
+    public User getUser() {
+        return user;
     }
 
-    public void setLocationY(String locationY) {
-        this.locationY = locationY;
+    public void setLongitude(Double longitude) {
+        Longitude = longitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        Latitude = latitude;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

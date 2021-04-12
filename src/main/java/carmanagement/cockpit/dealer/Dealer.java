@@ -18,8 +18,11 @@ public class Dealer {
     @Column(name = "name")
     private String name;
 
-    /*@OneToMany(mappedBy="dealer", cascade = CascadeType.ALL)
-    private Set<Car> cars = new HashSet<>();*/
+    @Column(name= "latitude")
+    private String latitude;
+
+    @Column(name= "longitude")
+    private String longitude;
 
     public Long getId() {
         return id;
