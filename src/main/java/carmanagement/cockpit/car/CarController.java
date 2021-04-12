@@ -11,7 +11,7 @@ import java.util.List;
 import javax.persistence.*;
 
 @RestController
-@RequestMapping("/api/car")
+@RequestMapping("/api/v1/car")
 @CrossOrigin("*")
 public class CarController {
 
