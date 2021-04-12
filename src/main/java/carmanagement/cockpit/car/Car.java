@@ -2,7 +2,6 @@ package carmanagement.cockpit.car;
 
 import carmanagement.cockpit.dealer.Dealer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 

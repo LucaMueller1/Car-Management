@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title>Car Tracking</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+</head>
+<body>
+
+<div id="mapid" style="height: 600px"></div>
+
+
+</body>
+
+<script type="text/javascript">
+    let mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    L.onclick(pageRedirect())
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+        tileSize: 512,
+        zoomOffset: -1,
+    }).addTo(mymap);
+    let markerGroup = L.layerGroup().addTo(mymap);
+
+    let carIcon = L.icon({
+        iconUrl: 'https://cdn.shopify.com/s/files/1/1061/1924/products/Eggplant_Emoji_grande.png?v=1571606066',
+
+        iconSize:     [38, 38], // size of the icon
+        //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        //popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+    setInterval(function(){
+
+        fetch("http://localhost:8080/api/v1/car", requestOptions)
+            .then(response => response.text())
+            .then(function(json) {
+                const parsedJSON = JSON.parse(json);
+                console.log('parsed json', json);
+                mymap.removeLayer(markerGroup);
+                markerGroup = L.layerGroup().addTo(mymap);
+                parsedJSON.forEach((repo) => {
+                    console.log(repo['latitude']);
+
+                    L.marker([repo.latitude, repo.longitude], {icon: carIcon}).addTo(markerGroup).bindPopup("Car Type :"+ repo.brand +  "Car ID:" + repo.id);
+
+                });
+
+            })
+            .catch(error => console.log('error', error));
+
+
+
+
+    }, 3000);
+
+
+
+</script>
+
+</html>

@@ -37,20 +37,13 @@ public class Dealer {
         this.name = name;
     }
 
-    /*public Set<Car> getCars() {
-        return cars;
-    }
-
-    public void setCars(Set<Car> cars) {
-        this.cars = cars;
-    }*/
-
     public Dealer() {
     }
 
-    /*public Dealer(Long id, String name, Set<Car> cars) {
+    public Dealer(Long id, String name, String latitude, String longitude) {
         this.id = id;
         this.name = name;
-        this.cars = cars;
-    }*/
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
