@@ -17,7 +17,6 @@
 
 <script type="text/javascript">
     let mymap = L.map('mapid').setView([51.505, -0.09], 13);
-    L.onclick(pageRedirect())
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 18,
@@ -48,17 +47,10 @@
                 markerGroup = L.layerGroup().addTo(mymap);
                 parsedJSON.forEach((repo) => {
                     console.log(repo['latitude']);
-
                     L.marker([repo.latitude, repo.longitude], {icon: carIcon}).addTo(markerGroup).bindPopup("Car Type :"+ repo.brand +  "Car ID:" + repo.id);
-
                 });
-
             })
             .catch(error => console.log('error', error));
-
-
-
-
     }, 3000);
 
 
