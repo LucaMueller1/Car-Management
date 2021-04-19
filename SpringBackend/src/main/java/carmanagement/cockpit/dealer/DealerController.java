@@ -3,7 +3,9 @@ package carmanagement.cockpit.dealer;
 import carmanagement.cockpit.car.Car;
 import carmanagement.cockpit.car.CarService;
 import carmanagement.cockpit.car.dto.Position;
+import carmanagement.cockpit.dealer.dto.RentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +28,10 @@ public class DealerController {
     @PostMapping("")
     public Long saveDealer(@RequestBody Dealer dealer) {
         return dealerService.saveDealer(dealer).getId();
+    }
+
+    @PostMapping("/rent")
+    public ResponseEntity<?> rentCar(@RequestBody RentRequest rentRequest){
+        return new ResponseEntity<>(dealerService.rentCar(rentRequest), HttpStatus.OK);
     }
 }

@@ -33,12 +33,16 @@ public class Car {
     @Column(name= "longitude")
     private Double Longitude;
 
-    public Car(Long id, String brand, Dealer dealer, Double latitude, Double longitude) {
+    @Column(name = "price")
+    private Double price;
+
+    public Car(Long id, String brand, Dealer dealer, Double latitude, Double longitude, Double price) {
         this.id = id;
         this.brand = brand;
         this.dealer = dealer;
         this.Latitude = latitude;
         this.Longitude = longitude;
+        this.price = price;
     }
 
     public Car() {
@@ -91,5 +95,13 @@ public class Car {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
