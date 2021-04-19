@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CarService {
@@ -28,6 +29,8 @@ public class CarService {
     public List<Car> findAll() {
         return repository.findAll();
     }
+
+    public Set<Car> findAllRentable() {return repository.findAllByUserId(null);}
 
     public Car updateCarPosition(Position position){
         Car car = repository.findById(position.getCar_id()).get();

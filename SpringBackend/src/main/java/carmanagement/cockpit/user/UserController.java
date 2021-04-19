@@ -1,12 +1,10 @@
 package carmanagement.cockpit.user;
 
+import carmanagement.cockpit.car.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -20,5 +18,10 @@ public class UserController {
     public ResponseEntity<?> getAllUsers(){
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
-    
+
+    // getUserById
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable("id") Long id){
+        return userService.findById(id);
+    }
 }
