@@ -58,6 +58,12 @@
 
 
     </dependencies>
+<distributionManagement>
+    <repository>
+    <id>myrepository</id>
+    <url>file:C:\Users\Daniel\Documents\Studium\carmanagement\WeatherBackend\dep\</url>
+</repository>
+</distributionManagement>
 
     <repositories>
         <repository>
