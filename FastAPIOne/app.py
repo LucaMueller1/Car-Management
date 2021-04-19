@@ -5,15 +5,18 @@ from fastapi.encoders import jsonable_encoder
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+import requests
 
 class User(BaseModel):
+    id: float
     lat: float
     long: float
 
 class Car(BaseModel):
     lat: float
     long: float
-    owner: str
+    id: int
+    
 
 class LocationBundle(BaseModel):
     user: User
@@ -38,14 +41,13 @@ def dist(lat1, long1, lat2, long2):
     km = 6371* c
     return km
 
-def find_nearest(user: dict, cars: list):
-    car_df = pd.DataFrame(jsonable_encoder(cars))
-    print(car_df)
-    distances = car_df.apply(
-        lambda row: dist(user.lat, user.long, row['lat'], row['long']), axis=1)
-    return car_df.loc[distances.idxmin(), 'owner']
+def find_nearest(latitude, longitude, cars: list):
+    distances = [{"id": car["id"], "dist": dist(latitude, longitude, car["latitude"], car["longitude"])} for car in cars]
+    return distances
 
-@app.post("/findNearestCar/")
-async def find_nearest_car(locations: LocationBundle):
-    nearest_location = find_nearest(locations.user, locations.cars)
-    return nearest_location
+@app.get("/findNearestCar/")
+async def find_nearest_car(user_id: int, latitude: float, longitude: float):
+    cars = requests.get("http://localhost:8080/api/v1/car/rentable").json()
+    nearest_location = find_nearest(latitude, longitude, cars)
+
+    return min(nearest_location, key=lambda x:x['dist'])
