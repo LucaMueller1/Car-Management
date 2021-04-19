@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 import javax.persistence.*;
@@ -35,6 +36,13 @@ public class CarController {
     public List<Car> getAllCars(){
         return carService.findAll();
     }
+
+    // getAllCars
+    @GetMapping("/rentable")
+    public Set<Car> getAllCarsRentable(){
+        return carService.findAllRentable();
+    }
+
     // getCarById
     @GetMapping("/{id}")
     public Car getCarById(@PathVariable("id") Long id){
