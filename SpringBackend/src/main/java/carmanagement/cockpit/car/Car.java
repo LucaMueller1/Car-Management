@@ -36,13 +36,14 @@ public class Car {
     @Column(name = "price")
     private Double price;
 
-    public Car(Long id, String brand, Dealer dealer, Double latitude, Double longitude, Double price) {
+    public Car(Long id, String brand, Dealer dealer, Double latitude, Double longitude, Double price, User user) {
         this.id = id;
         this.brand = brand;
         this.dealer = dealer;
         this.Latitude = latitude;
         this.Longitude = longitude;
         this.price = price;
+        this.user = user;
     }
 
     public Car() {
