@@ -39,4 +39,5 @@ public class Rental {
     public void setPrice(double price) {
         this.price = price;
     }
+
 }
