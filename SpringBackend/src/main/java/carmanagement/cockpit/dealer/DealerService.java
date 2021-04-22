@@ -4,6 +4,7 @@ import carmanagement.cockpit.car.Car;
 import carmanagement.cockpit.car.CarRepository;
 import carmanagement.cockpit.dealer.dto.RentRequest;
 import carmanagement.cockpit.dealer.dto.Rental;
+import carmanagement.cockpit.user.UserRepository;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -23,10 +24,7 @@ import org.apache.commons.httpclient.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 @Service
 public class DealerService {
@@ -39,6 +37,9 @@ public class DealerService {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Dealer saveDealer(Dealer dealer) {
         return repository.save(dealer);
     }
@@ -47,7 +48,7 @@ public class DealerService {
         return repository.findAll();
     }
 
-    public Rental rentCar(RentRequest rentRequest) {
+    public Rental priceCar(RentRequest rentRequest) {
         Car car = carRepository.getCarById(rentRequest.getCar_id()).get();
         double price = car.getPrice();
 //        call daniels weather service
@@ -85,5 +86,24 @@ public class DealerService {
             e.printStackTrace();
         }
         return new Rental(car, car.getDealer().getId(), price);
+    }
+
+    public Long rentCar(RentRequest rentRequest){
+        Rental rental = priceCar(rentRequest);
+        Car car = rental.getCar();
+        if (repository.findById(rental.getDealer_id()).isPresent()) car.setDealer(repository.findById(rental.getDealer_id()).get());
+        car.setPrice(rental.getPrice());
+        if (userRepository.findById(rentRequest.getUser_id()).isPresent()) car.setUser(userRepository.findById(rentRequest.getUser_id()).get());
+        log.info("Renting car {} with user {}", car.getId(), car.getUser().getId());
+        return car.getId();
+    }
+
+    public Long returnCar(Long car_id){
+        Car car = null;
+        if (carRepository.findById(car_id).isPresent()) car = carRepository.findById(car_id).get();
+        log.info("Returned Car {}", car_id);
+        car.setUser(null);
+        carRepository.save(car);
+        return car_id;
     }
 }
