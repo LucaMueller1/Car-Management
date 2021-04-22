@@ -43,11 +43,10 @@ def dist(lat1, long1, lat2, long2):
 
 def find_nearest(latitude, longitude, cars: list):
     distances = [{"id": car["id"], "dist": dist(latitude, longitude, car["latitude"], car["longitude"])} for car in cars]
-    return distances
+    return min(distances, key=lambda x:x['dist'])
 
 @app.get("/findNearestCar/")
 async def find_nearest_car(user_id: int, latitude: float, longitude: float):
     cars = requests.get("http://localhost:8080/api/v1/car/rentable").json()
-    nearest_location = find_nearest(latitude, longitude, cars)
-
-    return min(nearest_location, key=lambda x:x['dist'])
+    nearest_car = find_nearest(latitude, longitude, cars)
+    return  next(car for car in cars if car["id"] == nearest_car["id"])
