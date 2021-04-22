@@ -94,6 +94,7 @@ public class DealerService {
         if (repository.findById(rental.getDealer_id()).isPresent()) car.setDealer(repository.findById(rental.getDealer_id()).get());
         car.setPrice(rental.getPrice());
         if (userRepository.findById(rentRequest.getUser_id()).isPresent()) car.setUser(userRepository.findById(rentRequest.getUser_id()).get());
+        carRepository.save(car);
         log.info("Renting car {} with user {}", car.getId(), car.getUser().getId());
         return car.getId();
     }
