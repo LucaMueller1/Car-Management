@@ -6,6 +6,7 @@ from fastapi.encoders import jsonable_encoder
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+import uvicorn
 import requests
 
 class User(BaseModel):
@@ -48,7 +49,7 @@ def find_nearest(latitude, longitude, cars: list):
 
 @app.get("/findNearestCar/")
 async def find_nearest_car(user_id: int, latitude: float, longitude: float):
-    cars = requests.get("http://localhost:8080/api/v1/car/rentable").json()
+    cars = requests.get("http://193.196.52.118:8077/api/v1/car/rentable").json()
     nearest_car = find_nearest(latitude, longitude, cars)
     return  next(car for car in cars if car["id"] == nearest_car["id"])
 
