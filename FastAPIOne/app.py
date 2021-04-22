@@ -1,10 +1,12 @@
 from typing import Optional, Dict, List, Mapping
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
 from fastapi.encoders import jsonable_encoder
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+import uvicorn
 import requests
 
 class User(BaseModel):
@@ -47,6 +49,21 @@ def find_nearest(latitude, longitude, cars: list):
 
 @app.get("/findNearestCar/")
 async def find_nearest_car(user_id: int, latitude: float, longitude: float):
-    cars = requests.get("http://localhost:8080/api/v1/car/rentable").json()
+    cars = requests.get("http://193.196.52.118:8077/api/v1/car/rentable").json()
     nearest_car = find_nearest(latitude, longitude, cars)
     return  next(car for car in cars if car["id"] == nearest_car["id"])
+
+origins = [
+    '*'
+]
+
+app = CORSMiddleware(
+    app=app,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+if __name__ == '__main__':
+    uvicorn.run(app, host="0.0.0.0", port=8000)
