@@ -68,11 +68,13 @@ public class WeatherRiskController {
                     System.out.println(currentobj + System.lineSeparator() + System.lineSeparator());
                     double min_temp= currentobj.getDouble("min_temp");
 
-                    if (min_temp < 10.0){
+                    if (min_temp > 0 && min_temp < 10.0){
                         Double temp_score= (1/min_temp) * 0.5;
                         returned.increaseScore(temp_score);
                         System.out.println("Temperature score:" + temp_score);
                     }
+                    if (min_temp <0) returned.increaseScore((1/min_temp) * 0.5 * -1);
+
                     if (currentobj.getString("weather_state_abbr").equals("hr")) returned.increaseScore(0.2);
                     if (currentobj.getString("weather_state_abbr").equals("hs") || currentobj.getString("weather_state_abbr").equals("sl")) returned.increaseScore(0.4);
                     System.out.println("Final score for date: " +  formatter.format(tocompare)  + " "+ returned.getScore());
@@ -126,11 +128,12 @@ public class WeatherRiskController {
                     System.out.println(currentobj + System.lineSeparator() + System.lineSeparator());
                     double min_temp= currentobj.getDouble("min_temp");
 
-                    if (min_temp < 10.0){
+                    if (min_temp > 0 && min_temp < 10.0){
                         Double temp_score= (1/min_temp) * 0.5;
                         toadd.increaseScore(temp_score);
                         System.out.println("Temperature score:" + temp_score);
                     }
+                    if (min_temp <0) toadd.increaseScore((1/min_temp) * 0.5 * -1);
                     if (currentobj.getString("weather_state_abbr").equals("hr")) toadd.increaseScore(0.2);
                     if (currentobj.getString("weather_state_abbr").equals("hs") || currentobj.getString("weather_state_abbr").equals("sl")) toadd.increaseScore(0.4);
                     System.out.println("Final score for date: " +  formatter.format(tocompare)  + " "+ toadd.getScore());
