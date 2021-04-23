@@ -23,7 +23,8 @@ public class Car {
     private Dealer dealer;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(columnDefinition="integer", name = "user_id", nullable = true)
+    @JoinColumn(columnDefinition="integer", name = "user_id")
+    //@JoinColumn(columnDefinition="integer", name = "user_id", nullable = true)
     @JsonIgnore
     private User user;
 

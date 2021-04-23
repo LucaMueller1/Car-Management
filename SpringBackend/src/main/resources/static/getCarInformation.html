@@ -1,19 +1,92 @@
 <html>
 <head>
     <title>Car Tracking</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    <link crossorigin="" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          rel="stylesheet"/>
+    <script crossorigin=""
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin=""></script>
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
+<body style = "font-family:arial;">
+<h1 >Find nearest car</h1>
+<form id="findNearestCar">
+    <label for="userid">Enter user id:</label><br>
+    <input id="userid" name="userid" type="text"><br>
+
+    <label for="latitude">Latitude:</label><br>
+    <input id="latitude" name="latitude" type="text"><br>
+
+    <label for="longitude">Longitude:</label><br>
+    <input id="longitude" name="longitude" type="text"><br>
+
+    <input type="submit" value="Submit"/>
+</form>
+<div id="result"></div>
+<div id="webcams" style="white-space: nowrap;"></div>
+<button id="priceupdate">Calculate Price at the moment with weather conditions</button>
+<div id="finalprice"></div>
+
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
 
 <div id="mapid" style="height: 600px"></div>
 
 
 </body>
+
+
+<script type="text/javascript">
+    let userid;
+    let latitude;
+    let longitude;
+    let car_id;
+    let brand;
+    let imgdata;
+    let submitfunc = function(e){
+    e.preventDefault();
+     userid = $("#userid").val();
+     latitude= $("#latitude").val();
+     longitude= $("#longitude").val();
+    $.getJSON( "http://193.196.55.46:8000/findNearestCar/", { user_id: userid, latitude: latitude, longitude: longitude } , function( data ) {
+        $( "#webcams" ).html("");
+        car_id= data['id'];
+        brand= data['brand'];
+        $( "#finalprice" ).html("");
+        $.ajax({ url: "http://193.196.55.46:8070/getLogo/?brand=" + brand , async: false}).done(function(data) {
+            imgdata= data;
+            console.log(imgdata);
+        });
+
+            $( "#result" ).html( "Nearest car: ID:" +  car_id + " Marke:" +   data['brand'] + " Grundpreis:" + data['price'] + "&#8364; location: "+ data['latitude']+ "," + data['longitude']  + "<br/>" + "<img src='data:image/jpeg;base64," + imgdata + "'>");
+
+    });
+        $.getJSON( "http://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org:3000/webcams", { count: 20, lat: latitude, long: longitude , radius: 100} , function( data ) {
+            data.forEach((wdata) => {
+                $( "#webcams" ).append("<img src='" + wdata + "'>");
+            });
+        });
+}
+
+document.getElementById("priceupdate").onclick = function(e) {
+    $.ajax({
+        url: 'http://193.196.52.118:8077/api/v1/dealer/price',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ car_id: car_id, latitude: latitude, longitude: longitude}),
+        dataType: 'json'
+    }).done(function(data) {
+        $( "#finalprice" ).html("New final price: " + Number.parseFloat(data['price']).toPrecision(4)   + "&#8364;");
+
+    });
+
+
+}
+
+let form = document.getElementById("findNearestCar");
+form.addEventListener("submit", submitfunc, true);
+</script>
+
 
 <script type="text/javascript">
     let mymap = L.map('mapid').setView([51.505, -0.09], 13);
@@ -26,7 +99,7 @@
     let markerGroup = L.layerGroup().addTo(mymap);
 
     let carIcon = L.icon({
-        iconUrl: 'https://cdn.shopify.com/s/files/1/1061/1924/products/Eggplant_Emoji_grande.png?v=1571606066',
+        iconUrl: 'http://r-de.nl/wp-content/uploads/2015/02/car-icon-png-25.png',
 
         iconSize:     [38, 38], // size of the icon
         //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
@@ -38,7 +111,7 @@
     };
     setInterval(function(){
 
-        fetch("http://localhost:8080/api/v1/car", requestOptions)
+        fetch("http://193.196.52.118:8077/api/v1/car", requestOptions)
             .then(response => response.text())
             .then(function(json) {
                 const parsedJSON = JSON.parse(json);
@@ -47,7 +120,7 @@
                 markerGroup = L.layerGroup().addTo(mymap);
                 parsedJSON.forEach((repo) => {
                     console.log(repo['latitude']);
-                    L.marker([repo.latitude, repo.longitude], {icon: carIcon}).addTo(markerGroup).bindPopup("Car Type :"+ repo.brand +  "Car ID:" + repo.id);
+                    L.marker([repo.latitude, repo.longitude], {icon: carIcon}).addTo(markerGroup).bindPopup("Car Type: "+ repo.brand +  "Car ID:" + repo.id);
                 });
             })
             .catch(error => console.log('error', error));
