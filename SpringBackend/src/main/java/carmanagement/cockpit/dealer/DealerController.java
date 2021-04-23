@@ -41,6 +41,7 @@ public class DealerController {
 
     @DeleteMapping("/{id}")
     public Long delete(@PathVariable("id") Long id){
+        log.info("Cockpit: delete Dealer {}", id);
         dealerRepository.deleteById(id);
         return id;
     }

@@ -68,6 +68,7 @@ public class CarController {
 
     @DeleteMapping("/{id}")
     public Long deleteCar(@PathVariable("id") Long id){
+        log.info("Cockpit: delete Car");
         carRepository.deleteById(id);
         return id;
     }

@@ -41,6 +41,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public Long deleteUser(@PathVariable("id") Long id){
+        log.info("Cockpit: deleteUser");
         userRepository.deleteById(id);
         return id;
     }
