@@ -1,6 +1,14 @@
 package carmanagement.cockpit.car;
 
+import carmanagement.cockpit.car.dto.NewCar;
 import carmanagement.cockpit.car.dto.Position;
+import carmanagement.cockpit.dealer.Dealer;
+import carmanagement.cockpit.dealer.DealerRepository;
+import carmanagement.cockpit.dealer.DealerService;
+import carmanagement.cockpit.user.User;
+import carmanagement.cockpit.user.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +18,14 @@ import java.util.Set;
 
 @Service
 public class CarService {
+    private static final Logger log = LoggerFactory.getLogger(CarService.class);
 
     @Autowired
     private CarRepository repository;
+    @Autowired
+    private DealerRepository dealerRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public Car findById(Long id) {
         Optional<Car> opt = repository.findById(id);
@@ -22,7 +35,12 @@ public class CarService {
         return opt.get();
     }
 
-    public Car saveCar(Car car) {
+    public Car saveCar(NewCar newCar) {
+        Dealer dealer = null;
+        User user = null;
+        if (dealerRepository.findById(newCar.getDealer_id()).isPresent()) dealer = dealerRepository.findById(newCar.getDealer_id()).get();
+        Car car = new Car(null, newCar.getBrand(), dealer, newCar.getLatitude(), newCar.getLongitude(), newCar.getPrice(), user);
+        log.info("saving new car");
         return repository.save(car);
     }
 

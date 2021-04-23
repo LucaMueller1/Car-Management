@@ -23,6 +23,15 @@ public class User {
     @Column(name= "longitude")
     private Double Longitude;
 
+    public User(){}
+
+    public User(Long id, String name, Double latitude, Double longitude) {
+        this.id = id;
+        this.name = name;
+        Latitude = latitude;
+        Longitude = longitude;
+    }
+
     public Long getId() {
         return id;
     }

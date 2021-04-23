@@ -3,6 +3,7 @@ package carmanagement.cockpit.dealer;
 import carmanagement.cockpit.car.Car;
 import carmanagement.cockpit.car.CarService;
 import carmanagement.cockpit.car.dto.Position;
+import carmanagement.cockpit.dealer.dto.NewDealer;
 import carmanagement.cockpit.dealer.dto.RentRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class DealerController {
     }
 
     @PostMapping("")
-    public Long saveDealer(@RequestBody Dealer dealer) {
-        return dealerService.saveDealer(dealer).getId();
+    public Dealer save(@RequestBody NewDealer newDealer) {
+        return dealerService.save(newDealer);
     }
 
     @PostMapping("/price")

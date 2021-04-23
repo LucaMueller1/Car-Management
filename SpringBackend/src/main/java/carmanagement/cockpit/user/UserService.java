@@ -1,6 +1,7 @@
 package carmanagement.cockpit.user;
 
 import carmanagement.cockpit.car.Car;
+import carmanagement.cockpit.user.dto.NewUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,11 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    public User save(NewUser newUser){
+        User user = new User(null, newUser.getName(), newUser.getLatitude(), newUser.getLongitude());
+       return userRepository.save(user);
+    }
 
     public List<User> getAllUsers(){
         return userRepository.findAll();

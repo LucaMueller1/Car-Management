@@ -1,6 +1,7 @@
 package carmanagement.cockpit.car;
 
 
+import carmanagement.cockpit.car.dto.NewCar;
 import carmanagement.cockpit.car.dto.Position;
 import carmanagement.cockpit.dealer.DealerRepository;
 import org.hibernate.tool.schema.SchemaToolingLogging;
@@ -50,9 +51,8 @@ public class CarController {
     }
     // PostCar
     @PostMapping("")
-    public Long saveCar(@RequestBody Car car){
-        car.setDealer(dealerRepository.findById(car.getDealer().getId()).get());
-        return carService.saveCar(car).getId();
+    public Car saveCar(@RequestBody NewCar newCar){
+        return carService.saveCar(newCar);
     }
 
     //updateCarPosition

@@ -2,6 +2,7 @@ package carmanagement.cockpit.dealer;
 
 import carmanagement.cockpit.car.Car;
 import carmanagement.cockpit.car.CarRepository;
+import carmanagement.cockpit.dealer.dto.NewDealer;
 import carmanagement.cockpit.dealer.dto.RentRequest;
 import carmanagement.cockpit.dealer.dto.Rental;
 import carmanagement.cockpit.user.UserRepository;
@@ -40,8 +41,9 @@ public class DealerService {
     @Autowired
     private UserRepository userRepository;
 
-    public Dealer saveDealer(Dealer dealer) {
-        return repository.save(dealer);
+    public Dealer save(NewDealer newDealer) {
+        Dealer dealer1 = new Dealer(null, newDealer.getName(),newDealer.getLatitude(), newDealer.getLongitude());
+        return repository.save(dealer1);
     }
 
     public List<Dealer> findAll() {
