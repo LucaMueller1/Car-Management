@@ -75,7 +75,7 @@ public class DealerService {
                 JSONObject obj = new JSONObject(responseBody);
                 double score = obj.getDouble("score");
                 log.info("rentCar: adding Risk {} to price factor {}", score, car.getPrice());
-                price=price*(score+1);
+                price+=price*(score+1);
                 price*=0.75;
                 log.info("rentCar: new Price -> {}", price);
             } else {
