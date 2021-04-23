@@ -146,7 +146,7 @@ form.addEventListener("submit", submitfunc, true);
                 markerGroup = L.layerGroup().addTo(mymap);
                 parsedJSON.forEach((repo) => {
                     console.log(repo['latitude']);
-                    L.marker([repo.latitude, repo.longitude], {icon: carIcon}).addTo(markerGroup).bindPopup("Car Type: "+ repo.brand +  "Car ID:" + repo.id);
+                    L.marker([repo.latitude, repo.longitude], {icon: carIcon}).addTo(markerGroup).bindPopup("Car Type: "+ repo.brand +  " Car ID:" + repo.id);
                 });
             })
             .catch(error => console.log('error', error));

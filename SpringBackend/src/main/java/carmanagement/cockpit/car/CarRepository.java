@@ -1,6 +1,5 @@
 package carmanagement.cockpit.car;
 
-import carmanagement.cockpit.dealer.Dealer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +13,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query(value = "SELECT * FROM cars WHERE id= :car_id", nativeQuery = true)
     Optional<Car> getCarById(Long car_id);
+
+    @Query(value = "UPDATE cars SET user_id=NULL WHERE id=:car_id", nativeQuery = true)
+    void deleteUser(Long car_id);
 }
