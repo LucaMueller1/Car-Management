@@ -39,6 +39,8 @@
 <script type="text/javascript">
     let userid;
     let latitude;
+    let car_latitude;
+    let car_longitude;
     let longitude;
     let car_id;
     let brand;
@@ -51,6 +53,8 @@
     $.getJSON( "http://193.196.55.46:8000/findNearestCar/", { user_id: userid, latitude: latitude, longitude: longitude } , function( data ) {
         $( "#webcams" ).html("");
         car_id= data['id'];
+        car_latitude = data['latitude'];
+        car_longitude = data['longitude'];
         brand= data['brand'];
         $( "#finalprice" ).html("");
         $.ajax({ url: "http://193.196.55.46:8070/getLogo/?brand=" + brand , async: false}).done(function(data) {
@@ -59,13 +63,13 @@
         });
 
             $( "#result" ).html( "Nearest car: ID:" +  car_id + " Marke:" +   data['brand'] + " Grundpreis:" + data['price'] + "&#8364; location: "+ data['latitude']+ "," + data['longitude']  + "<br/>" + "<img src='data:image/jpeg;base64," + imgdata + "'>");
-
-    });
-        $.getJSON( "http://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org:3000/webcams", { count: 20, lat: latitude, long: longitude , radius: 100} , function( data ) {
+        $.getJSON( "http://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org:3000/webcams", { count: 20, lat: car_latitude, long: car_longitude , radius: 100} , function( data ) {
             data.forEach((wdata) => {
                 $( "#webcams" ).append("<img src='" + wdata + "'>");
             });
         });
+    });
+
 }
 
 document.getElementById("priceupdate").onclick = function(e) {
@@ -73,7 +77,7 @@ document.getElementById("priceupdate").onclick = function(e) {
         url: 'http://193.196.52.118:8077/api/v1/dealer/price',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ car_id: car_id, latitude: latitude, longitude: longitude}),
+        data: JSON.stringify({ car_id: car_id, latitude: car_latitude, longitude: car_longitude}),
         dataType: 'json'
     }).done(function(data) {
         $( "#finalprice" ).html("New final price: " + Number.parseFloat(data['price']).toPrecision(4)   + "&#8364;");
