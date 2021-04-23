@@ -74,6 +74,7 @@
         car_longitude = data['longitude'];
         brand= data['brand'];
         $( "#finalprice" ).html("");
+        mymap.flyTo([car_latitude, car_longitude], 8)
         $.ajax({ url: "http://193.196.55.46:8070/getLogo/?brand=" + brand , async: false}).done(function(data) {
             imgdata= data;
             console.log(imgdata);
