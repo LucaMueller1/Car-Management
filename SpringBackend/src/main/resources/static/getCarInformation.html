@@ -8,30 +8,50 @@
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 </head>
+
 <body style = "font-family:arial;">
+    <div class="container">
+
 <h1 >Find nearest car</h1>
 <form id="findNearestCar">
-    <label for="userid">Enter user id:</label><br>
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+        <input id="userid" type="text" class="form-control" name="userid" placeholder="User ID">
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-resize-horizontal"></i></span>
+        <input id="latitude" type="number" class="form-control" name="lat" placeholder="Latitude">
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span>
+        <input id="longitude" type="number" class="form-control" name="long" placeholder="Longitude">
+    </div>
+    <!-- <label for="userid">Enter user id:</label><br>
     <input id="userid" name="userid" type="text"><br>
 
-    <label for="latitude">Latitude:</label><br>
+    <label for="latitude"></label><br>
     <input id="latitude" name="latitude" type="text"><br>
 
-    <label for="longitude">Longitude:</label><br>
-    <input id="longitude" name="longitude" type="text"><br>
+    <label for="longitude"></label><br>
+    <input id="longitude" name="longitude" type="text"><br> -->
 
-    <input type="submit" value="Submit"/>
+    <input class="btn" type="submit" value="Submit"/>
 </form>
 <div id="result"></div>
 <div id="webcams" style="white-space: nowrap;"></div>
-<button id="priceupdate">Calculate Price at the moment with weather conditions</button>
+<button type="button" class="btn btn-primary" id="priceupdate">Calculate Price at the moment with weather conditions</button>
 <div id="finalprice"></div>
 
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 
 <div id="mapid" style="height: 600px"></div>
 
+</div>
 
 </body>
 
