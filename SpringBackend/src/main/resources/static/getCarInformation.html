@@ -11,13 +11,16 @@
      <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Raleway&display=swap" rel="stylesheet"> 
 </head>
 
-<body style = "font-family:arial;">
+<body style = "font-family: 'Manrope', sans-serif;">
     <div class="container">
 
-<h1 >Find nearest car</h1>
+<h1 style="font-family: 'Manrope', sans-serif;">Cockpit</h1>
+<br>
 <form id="findNearestCar">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -31,22 +34,24 @@
         <span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span>
         <input id="longitude" type="number" class="form-control" name="long" placeholder="Longitude">
     </div>
+    <br>
 
     <input class="btn" type="submit" value="Submit"/>
 </form>
-<div class="panel panel-default">
+
+
+
+<div id="mapid" style="height: 600px"></div>
+
+
 <div id="result"></div>
-</div>
 
 <div class="panel panel-default">
-<div id="webcams" style="white-space: nowrap;"></div>
+<div id="webcams" style="align-content: center"></div>
 </div>
-<button type="button" class="btn btn-primary" id="priceupdate">Calculate Price at the moment with weather conditions</button>
-<div id="finalprice"></div>
 
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 
-<div id="mapid" style="height: 600px"></div>
 
 </div>
 
@@ -68,7 +73,7 @@
      latitude= $("#latitude").val();
      longitude= $("#longitude").val();
     $.getJSON( "http://193.196.55.46:8000/findNearestCar/", { user_id: userid, latitude: latitude, longitude: longitude } , function( data ) {
-        $( "#webcams" ).html("");
+        $( "#webcams" ).html("<h1>Webcams:</h1>");
         car_id= data['id'];
         car_latitude = data['latitude'];
         car_longitude = data['longitude'];
@@ -80,17 +85,12 @@
             console.log(imgdata);
         });
 
-            $( "#result" ).html( "Nearest car: ID:" +  car_id + " Marke:" +   data['brand'] + " Grundpreis:" + data['price'] + "&#8364; location: "+ data['latitude']+ "," + data['longitude']  + "<br/>" + "<img src='data:image/jpeg;base64," + imgdata + "'>");
+            $( "#result" ).html( "<h2>Nearest Car:</h2> <div class='panel panel-default'> <div class='alert alert-info'> <img class='img-circle' src='data:image/jpeg;base64," + imgdata + "'>" + "<br>ID:" +  car_id + "<br> Brand:" + data['brand'] + "<br> Base Price:" + data['price'] + "&#8364; <br> Location: "+ data['latitude']+ ", " + data['longitude']  + "<br/>" +"</div><button type='button' class='btn btn-primary' id='priceupdate'>Calculate Price (considering weather conditions)</button><div id='finalprice'></div></div>");
         $.getJSON( "http://e45a7e99-a45e-4ecb-8b43-ec17337b634a.ma.bw-cloud-instance.org:3000/webcams", { count: 20, lat: car_latitude, long: car_longitude , radius: 100} , function( data ) {
             data.forEach((wdata) => {
                 $( "#webcams" ).append("<img src='" + wdata + "'>");
             });
-        });
-    });
-
-}
-
-document.getElementById("priceupdate").onclick = function(e) {
+            document.getElementById("priceupdate").onclick = function(e) {
     $.ajax({
         url: 'http://193.196.52.118:8077/api/v1/dealer/price',
         type: 'POST',
@@ -98,10 +98,14 @@ document.getElementById("priceupdate").onclick = function(e) {
         data: JSON.stringify({ car_id: car_id, latitude: car_latitude, longitude: car_longitude}),
         dataType: 'json'
     }).done(function(data) {
-        $( "#finalprice" ).html("New final price: " + Number.parseFloat(data['price']).toPrecision(4)   + "&#8364;");
+        $( "#finalprice" ).html("<br><div class='alert alert-warning'>New final price: <h4>" + Number.parseFloat(data['price']).toPrecision(4)   + "&#8364;</h4></div>");
 
     });
 
+
+}
+        });
+    });
 
 }
 
